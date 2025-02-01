@@ -11,6 +11,7 @@ link-citations: true
 
 ```{r include = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
+
 ```
 
 Plastic pollution is a major and growing problem, negatively affecting oceans and wildlife health.
@@ -33,6 +34,7 @@ Then make your own copy of this by clicking on `Use this template`:
 
 ```{r git-template, fig.fullwidth=TRUE, echo = FALSE}
 knitr::include_graphics("img/repo-template.png")
+library(ggplot2)
 ```
 
 Grab the URL of the repo, and clone it in RStudio.
@@ -44,20 +46,33 @@ The output will be in the file markdown `.md` file with the same name.
 
 ## Packages
 
+
 We'll use the **tidyverse** package for this analysis.
 Run the following code in the Console to load this package.
 
 ```{r load-packages, message=FALSE, eval=TRUE}
 library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(forcats)
+library(lubridate)
+library(purrr)
+library(readr)
+library(stringr)
+library(tibble)
+library(tidyr)
 ```
 
+
 ## Data
+
 
 The dataset for this assignment can be found as a csv file in the `data` folder of your repository.
 You can read it in using the following.
 
 ```{r load-data, message=FALSE, eval=TRUE}
-plastic_waste <- read_csv("data/plastic-waste.csv")
+#plastic_waste <- read_csv("data/plastic-waste.csv")
+library(ggplot2)
 ```
 
 The variable descriptions are as follows:
@@ -79,24 +94,27 @@ The variable descriptions are as follows:
 -   Verify that the dataset has loaded into the Environment. How many observations are in the dataset? Clicking on the dataset in the Environment will allow you to inspect it more carefully. Alternatively, you can type `View(plastic_waste)` into the Console to do this.
 
 ```{marginfigure}
-**Hint:** If you're not sure, run the command `?NA` which will lead you to the documentation.
+
+#Exercises
+```{r plastic_waste_per_cap_his, eval=TRUE}
+library(ggplot2)
+plastic_waste <- read_csv("data/plastic-waste.csv")
+
+
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) + 
+geom_histogram(binwidth = 0.2)
+
 ```
-
--   Have a quick look at the data and notice that there are cells taking the value `NA` -- what does this mean?
-
+-   
 # Exercises
 
-Let's start by taking a look at the distribution of plastic waste per capita in 2010.
 
-```{r plastic_waste_per_cap-hist, eval=TRUE}
-ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
-  geom_histogram(binwidth = 0.2)
-```
+
 
 One country stands out as an unusual observation at the top of the distribution.
 One way of identifying this country is to filter the data for countries where plastic waste per capita is greater than 3.5 kg/person.
 
-```{r plastic_waste_per_cap-max, eval=TRUE}
+```{r plastic_waste_per_cap_max, eval=TRUE}
 plastic_waste %>%
   filter(plastic_waste_per_cap > 3.5)
 ```
@@ -106,34 +124,65 @@ You might consider doing some research on Trinidad and Tobago to see why plastic
 
 1.  Plot, using histograms, the distribution of plastic waste per capita faceted by continent. What can you say about how the continents compare to each other in terms of their plastic waste per capita?
 
-```{marginfigure}
+answer: It looks like Africa has the highest plastic waste and south america has the least
+
+
+```{r plastic_waste_per_cap, eval=TRUE}
+library(ggplot2)
+ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, color = continent, fill = continent)) + geom_histogram (alpha = 0.3)
+
+
+
+```
+
+
+
+
+
+
+
+
+
 **NOTE:** From this point onwards the plots and the output of the code are not displayed in the lab instructions, but you can and should the code and view the results yourself.
+
+
 ```
 
 Another way of visualizing numerical data is using density plots.
 
-```{r plastic_waste_per_cap-dens}
-ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+``` }
+
+
+        
+                     
+  
+```{r plastic_waste_per_cap_dens, eval=TRUE}
+ggplot(data = plastic_waste,
+       aes(x = plastic_waste_per_cap,
+           colo = continent))+
   geom_density()
 ```
-
-And compare distributions across continents by colouring density curves by continent.
-
-```{r plastic_waste_per_cap-dens-color}
-ggplot(data = plastic_waste, 
-       mapping = aes(x = plastic_waste_per_cap, 
-                     color = continent)) +
-  geom_density()
+  
+  
 ```
 
 The resulting plot may be a little difficult to read, so let's also fill the curves in with colours as well.
 
-```{r plastic_waste_per_cap-dens-color-fill}
+```{r plastic_waste_per_cap-dens-color, eval=TRUE}
 ggplot(data = plastic_waste, 
        mapping = aes(x = plastic_waste_per_cap, 
                      color = continent, 
                      fill = continent)) +
   geom_density()
+```
+
+
+```{r plastic_waste_per_cap-dems-color}
+ggplot(data = plastic_waste,
+aes(x = plastic_waste_per_cap, color = continent, fill = continent)) +
+geom_density()
+```
+
 ```
 
 The overlapping colours make it difficult to tell what's happening with the distributions in continents plotted first, and hence covered by continents plotted over them.
@@ -141,19 +190,33 @@ We can change the transparency level of the fill color to help with this.
 The `alpha` argument takes values between 0 and 1: 0 is completely transparent and 1 is completely opaque.
 There is no way to tell what value will work best, so you just need to try a few.
 
-```{r plastic_waste_per_cap-dens-color-fill-alpha}
+```{r plastic_waste_per_cap-dens-color-fill, eval=TRUE}
+
 ggplot(data = plastic_waste, 
        mapping = aes(x = plastic_waste_per_cap, 
                      color = continent, 
                      fill = continent)) +
-  geom_density(alpha = 0.7)
+  geom_density(alpha = 0.4)
+  
 ```
 
 This still doesn't look great...
 
 1.  Recreate the density plots above using a different (lower) alpha level that works better for displaying the density curves for all continents.
+```{r plastic_waste_per_cap-dens-color-fill-alpha, eval=TRUE}
+
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.1)
+```
+
+
 
 2.  Describe why we defined the `color` and `fill` of the curves by mapping aesthetics of the plot but we defined the `alpha` level as a characteristic of the plotting geom.
+
+Answer: the color and fill of the curves are aesthetics because they are visual properties of the plots. Its what makes it more pleasant and easier for people to read the data. The alpha is apart of the plotting geom because its apart of the curves themselves and its testing. Its the opacity of the geom. 
 
 🧶 ✅ ⬆️ *Now is a good time to knit your document and commit and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
