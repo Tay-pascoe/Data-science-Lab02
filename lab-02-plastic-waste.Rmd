@@ -299,6 +299,8 @@ If you haven't had time to finish the exercises above, please ask for help befor
 
 1.  Recreate the following plot, and interpret what you see in context of the data.
 
+answer: the data is nonlinear and the coastal population waste is more than plastic waste
+
 ```{r echo=FALSE, message=FALSE, eval=TRUE, warning=FALSE}
 plastic_waste %>% 
   mutate(coastal_pop_prop = coastal_pop / total_pop) %>%
