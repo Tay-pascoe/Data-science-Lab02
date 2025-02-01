@@ -127,9 +127,9 @@ You might consider doing some research on Trinidad and Tobago to see why plastic
 answer: It looks like Africa has the highest plastic waste and south america has the least
 
 
-```{r plastic_waste_per_cap, eval=TRUE}
-library(ggplot2)
-ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, color = continent, fill = continent)) + geom_histogram (alpha = 0.3)
+```{r plastic_waste_per_cap_hist}
+
+ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, color = continent, fill = continent)) + geom_histogram (alpha = 0.2)
 
 
 
@@ -190,7 +190,7 @@ We can change the transparency level of the fill color to help with this.
 The `alpha` argument takes values between 0 and 1: 0 is completely transparent and 1 is completely opaque.
 There is no way to tell what value will work best, so you just need to try a few.
 
-```{r plastic_waste_per_cap-dens-color-fill, eval=TRUE}
+```{r plastic_waste_per_cap-dens-color-fill}
 
 ggplot(data = plastic_waste, 
        mapping = aes(x = plastic_waste_per_cap, 
@@ -231,19 +231,57 @@ ggplot(data = plastic_waste,
 
 1.  Convert your side-by-side box plots from the previous task to [violin plots](http://ggplot2.tidyverse.org/reference/geom_violin.html). What do the violin plots reveal that box plots do not? What features are apparent in the box plots but not in the violin plots?
 
+answer: the violin plots show more data of how much plastic waste North america has than the other continent because of how wide it goes. In the boxplot you can see the waste better via the pointed dots.
+
 ```{marginfigure}
-**Remember:** We use `geom_point()` to make scatterplots.
+
+```{r plastic_waste_per_cap_vio}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_violin()
+
 ```
 
 1.  Visualize the relationship between plastic waste per capita and mismanaged plastic waste per capita using a scatterplot.
     Describe the relationship.
+    
+answer: there is a positive correlation between the increase in mismanaged waste and plastic waste per capita
+
+```{r plastic_waste_per_cap_scatterplot}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap))+
+geom_point()
+
+```
+    
 
 2.  Colour the points in the scatterplot by continent.
     Does there seem to be any clear distinctions between continents with respect to how plastic waste per capita and mismanaged plastic waste per capita are associated?
 
+answer: europe has less mismanaged waste but more plastic waste. Africa has less plastic waste but more mismanaged waste. Many of the continents seem to be showing a little bit of both in correlation with increasing mismanaged waste and plastic waste
+```{r plastic_waste_per_cap_color}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
+  geom_point()
+
+```
+    
+
 3.  Visualize the relationship between plastic waste per capita and total population as well as plastic waste per capita and coastal population.
     You will need to make two separate plots.
     Do either of these pairs of variables appear to be more strongly linearly associated?
+    
+answer: neither plot appears to be strongly linear but I think the coastal population is more linear than the total population 
+
+```{r plastic_waste_per_cap_total_pop}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, y = total_pop)) +
+  geom_point()
+
+```
+```{r plastic_waste_per_cap}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, y = coastal_pop)) +
+  geom_point()
+```
+  
 
 🧶 ✅ ⬆️ *Now is another good time to knit your document and commit and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
